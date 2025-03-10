@@ -37,6 +37,9 @@ class LoginView(APIView):
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
             password = serializer.validated_data.get('password')
+            # Add debug log of password and email
+            print("Email:", email)
+            print("Password:", password)
 
             try:
                 user = User.objects.get(email=email)

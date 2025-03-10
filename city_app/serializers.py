@@ -8,10 +8,26 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['email','password']
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+    password = serializers.CharField(
+        max_length=128,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
+
+    def validate(self, data):
+        """
+        Optional: Add custom validation if you want to check credentials here
+        instead of in the view.
+        """
+        email = data.get('email')
+        password = data.get('password')
+
+        if not email or not password:
+            raise serializers.ValidationError("Both email and password are required.")
+        
+        return data
 
 
 class ProductSerializer(serializers.ModelSerializer):
